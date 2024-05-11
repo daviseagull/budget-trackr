@@ -11,7 +11,8 @@ const envSchema = z.object({
     'verbose',
     'debug',
     'silly'
-  ])
+  ]),
+  DATABASE_URL: z.string().url()
 })
 
 export const env = envSchema.parse(process.env)
