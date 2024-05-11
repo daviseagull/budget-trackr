@@ -1,22 +1,21 @@
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
-import logger from './config/logger'
+import { errorHandler } from './middleware/error-handler.middleware'
 
 const app = express()
-const port = 3000
 
 app.use(cors())
 app.use(helmet())
+app.use(express.json())
 
-app.get('/', (req, res) => {
-  logger.info('Teste')
-  res.send('Hello World!')
+app.use(errorHandler)
+
+app.all('/*', (req, res) => {
+  res.status(404).json({
+    statusCode: 404,
+    message: 'Cannot find specified route'
+  })
 })
 
-app.listen(port, () => {
-  logger.info(`Server started at http://localhost:${port}`)
-})
-
-// Export Express app
 export default app
