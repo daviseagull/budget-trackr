@@ -37,11 +37,14 @@ importers:
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
+      typescript:
+        specifier: ^5.2.2
+        version: 5.4.5
       typescript-eslint:
         specifier: ^7.8.0
         version: 7.8.0(eslint@9.2.0)(typescript@5.4.5)
 
-  apps/backend:
+  apps/api:
     dependencies:
       cors:
         specifier: ^2.8.5
@@ -65,9 +68,6 @@ importers:
       tsx:
         specifier: ^4.9.5
         version: 4.9.5
-      typescript:
-        specifier: ^5.2.2
-        version: 5.4.5
 
   apps/web:
     dependencies:
@@ -87,18 +87,12 @@ importers:
       '@vitejs/plugin-react-swc':
         specifier: ^3.5.0
         version: 3.6.0(vite@5.2.11(@types/node@20.12.11))
-      typescript:
-        specifier: ^5.2.2
-        version: 5.4.5
       vite:
         specifier: ^5.2.0
         version: 5.2.11(@types/node@20.12.11)
 
   packages/common:
     devDependencies:
-      typescript:
-        specifier: ^5.2.2
-        version: 5.4.5
       vite:
         specifier: ^5.2.0
         version: 5.2.11(@types/node@20.12.11)
