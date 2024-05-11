@@ -1,7 +1,13 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import logger from '../config/logger'
 
-export const errorHandler = (err: Error, req: Request, res: Response) => {
+export const errorHandler = (
+  err: Error,
+  req: Request,
+  res: Response,
+   
+  next: NextFunction
+) => {
   err.name || err.stack
     ? logger.error(`${err.message} - (${err.name}) ${err.stack}`)
     : logger.error(err.message)
@@ -9,4 +15,6 @@ export const errorHandler = (err: Error, req: Request, res: Response) => {
   res.json({
     message: err.message
   })
+
+  next()
 }
