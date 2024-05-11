@@ -12,7 +12,11 @@ const envSchema = z.object({
     'debug',
     'silly'
   ]),
-  DATABASE_URL: z.string().url()
+  DATABASE_URL: z.string().url(),
+  COGNITO_CLIENT_ID: z.string(),
+  COGNITO_CLIENT_SECRET: z.string(),
+  COGNITO_USER_POOL_ID: z.string(),
+  REGION: z.string()
 })
 
 export const env = envSchema.parse(process.env)
