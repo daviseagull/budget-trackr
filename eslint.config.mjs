@@ -1,6 +1,6 @@
-import pluginJs from '@eslint/js';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import pluginJs from '@eslint/js'
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
 export default [
   {
@@ -8,11 +8,11 @@ export default [
     ignores: [
       'coverage',
       'public',
-      'dist',
+      'build',
       'pnpm-lock.yaml',
-      'pnpm-workspace.yaml',
-    ],
+      'pnpm-workspace.yaml'
+    ]
   },
   pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-];
+  ...tseslint.configs.recommended
+]
