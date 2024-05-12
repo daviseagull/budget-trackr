@@ -9,9 +9,9 @@
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [
-      "eslint --fix"
-    ],
-    "**/*": "prettier --write --ignore-unknown"
+      "eslint --fix",
+      "prettier --write --ignore-unknown"
+    ]
   },
   "keywords": [],
   "author": "Davi Seagull",

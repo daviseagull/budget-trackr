@@ -11,7 +11,7 @@ export const httpUtils = {
       success,
       message,
       statusCode,
-      data
+      data,
     }
-  }
+  },
 }

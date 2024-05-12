@@ -4,7 +4,6 @@ import { cognitoService } from '../services/cognito.service'
 
 export const authUseCases = {
   signIn: async (email: string, password: string): Promise<SignInResponse> => {
-    logger.info(`Trying to log in user ${email} ${password}`)
     return await cognitoService.signIn(email, password)
   },
 
@@ -36,5 +35,5 @@ export const authUseCases = {
     logger.info(
       `Finishing forgot password for email ${email} ${code} ${password}`
     )
-  }
+  },
 }
