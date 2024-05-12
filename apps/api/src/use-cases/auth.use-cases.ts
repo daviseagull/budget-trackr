@@ -1,5 +1,6 @@
 import { SignInResponse, SignUpRequest } from '@budget-trackr/dtos'
 import logger from '../config/logger'
+import { userRepository } from '../repositories/user.repository'
 import { cognitoService } from '../services/cognito.service'
 
 export const authUseCases = {
@@ -12,7 +13,14 @@ export const authUseCases = {
   },
 
   signUp: async (userData: SignUpRequest) => {
-    return await cognitoService.signUp(userData)
+    const createInCognito = cognitoService.signUp(userData)
+    const createInDb = userRepository.create(userData)
+
+    Promise.all([createInCognito, createInDb]).then((values) => {
+      const cognitoId = values[0]
+      const user = values[1]
+      userRepository.setCognitoId(user.id, cognitoId)
+    })
   },
 
   resendCodeUseCase: (email: string) => {
