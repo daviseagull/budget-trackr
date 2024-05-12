@@ -11,8 +11,8 @@ export const authUseCases = {
     logger.info(`Signing out user ${user} ${token}`)
   },
 
-  signUpUseCase: (userData: SignUpRequest) => {
-    logger.info(`Signing up user ${userData.email}`)
+  signUp: async (userData: SignUpRequest) => {
+    return await cognitoService.signUp(userData)
   },
 
   resendCodeUseCase: (email: string) => {

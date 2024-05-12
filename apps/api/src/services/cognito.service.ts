@@ -6,7 +6,7 @@ import {
   LimitExceededException,
   NotAuthorizedException,
   UserNotConfirmedException,
-  UsernameExistsException
+  UsernameExistsException,
 } from '@aws-sdk/client-cognito-identity-provider'
 import { SignUpRequest } from '@budget-trackr/dtos'
 import createHttpError from 'http-errors'
@@ -16,14 +16,13 @@ import { cognitoUtils } from '../utils/cognito.utils'
 const getUserAttributes = (user: SignUpRequest) => {
   return [
     { Value: user.email, Name: 'email' },
-    { Value: user.birthday.toString(), Name: 'birthdate' },
     { Value: `${user.name.first} ${user.name.last}`, Name: 'name' },
     { Value: user.name.first, Name: 'given_name' },
     { Value: user.name.last, Name: 'family_name' },
     {
       Value: `${user.phone.country}${user.phone.areaCode}${user.phone.number}`,
-      Name: 'phone_number'
-    }
+      Name: 'phone_number',
+    },
   ]
 }
 
@@ -35,14 +34,14 @@ export const cognitoService = {
       AuthParameters: {
         USERNAME: username,
         PASSWORD: password,
-        SECRET_HASH: cognitoUtils.hashCognitoSecret(username)
-      }
+        SECRET_HASH: cognitoUtils.hashCognitoSecret(username),
+      },
     }
     try {
       const data = await cognitoUtils.provider().initiateAuth(params)
       return {
         accessToken: data.AuthenticationResult!.AccessToken!,
-        type: 'Bearer'
+        type: 'Bearer',
       }
     } catch (err) {
       if (err instanceof UserNotConfirmedException) {
@@ -70,7 +69,7 @@ export const cognitoService = {
       Password: user.password,
       Username: user.email,
       SecretHash: cognitoUtils.hashCognitoSecret(user.email),
-      UserAttributes: getUserAttributes(user)
+      UserAttributes: getUserAttributes(user),
     }
 
     try {
@@ -89,9 +88,7 @@ export const cognitoService = {
       }
 
       if (err instanceof Error) {
-        throw new createHttpError.InternalServerError(
-          `Unknown error while trying to create user in IAM`
-        )
+        throw new createHttpError.InternalServerError(err.message)
       }
 
       throw new createHttpError.InternalServerError(
@@ -105,7 +102,7 @@ export const cognitoService = {
       ClientId: env.COGNITO_CLIENT_ID,
       ConfirmationCode: code,
       Username: email,
-      SecretHash: cognitoUtils.hashCognitoSecret(email)
+      SecretHash: cognitoUtils.hashCognitoSecret(email),
     }
     try {
       await cognitoUtils.provider().confirmSignUp(params)
@@ -136,7 +133,7 @@ export const cognitoService = {
     const params = {
       ClientId: env.COGNITO_CLIENT_ID,
       SecretHash: cognitoUtils.hashCognitoSecret(email),
-      Username: email
+      Username: email,
     }
     try {
       await cognitoUtils.provider().resendConfirmationCode(params)
@@ -161,7 +158,7 @@ export const cognitoService = {
 
   signOut: async (token: string) => {
     const params = {
-      AccessToken: token
+      AccessToken: token,
     }
 
     try {
@@ -189,7 +186,7 @@ export const cognitoService = {
       SecretHash: cognitoUtils.hashCognitoSecret(email),
       Username: email,
       ConfirmationCode: code,
-      Password: password
+      Password: password,
     }
 
     try {
@@ -211,7 +208,7 @@ export const cognitoService = {
     const params = {
       ClientId: env.COGNITO_CLIENT_ID,
       SecretHash: cognitoUtils.hashCognitoSecret(email),
-      Username: email
+      Username: email,
     }
 
     try {
@@ -221,5 +218,5 @@ export const cognitoService = {
         'Unknown error while trying to forgot password'
       )
     }
-  }
+  },
 }
