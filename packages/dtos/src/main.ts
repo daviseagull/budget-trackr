@@ -16,3 +16,19 @@ export type SignUpRequest = {
   birthday: Date
   phone: Phone
 }
+
+export type SignInRequest = {
+  email: string
+  password: string
+}
+
+export type ConfirmUserRequest = {
+  email: string
+  code: string
+}
+
+export type ConfirmForgotPassword = {
+  email: string
+  code: string
+  password: string
+}
