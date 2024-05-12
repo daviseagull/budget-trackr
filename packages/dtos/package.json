@@ -5,6 +5,9 @@
   "type": "module",
   "main": "./dist/dtos.js",
   "types": "./dist/main.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

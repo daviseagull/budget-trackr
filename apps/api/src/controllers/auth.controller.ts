@@ -1,7 +1,7 @@
 import {
   SignInRequest,
   SignInRequestSchema,
-  SignInResponse
+  SignInResponse,
 } from '@budget-trackr/dtos'
 import { Request, Response } from 'express'
 import { authUseCases } from '../use-cases/auth.use-cases'
@@ -18,5 +18,5 @@ export const authController = {
     return res
       .status(200)
       .send(httpUtils.createResponse(true, 'User logged in', 200, response))
-  }
+  },
 }
