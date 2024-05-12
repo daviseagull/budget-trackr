@@ -1,19 +1,17 @@
 import { NextFunction, Request, Response } from 'express'
+import { HttpError } from 'http-errors'
 import logger from '../config/logger'
+import { httpUtils } from '../utils/http.utils'
 
 export const errorHandler = (
-  err: Error,
+  err: Error & HttpError,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  err.name || err.stack
-    ? logger.error(`${err.message} - (${err.name}) ${err.stack}`)
-    : logger.error(err.message)
+  logger.error(err.message)
 
-  res.json({
-    message: err.message
-  })
+  res.json(httpUtils.createResponse(false, err.message, err.statusCode))
 
   next()
 }

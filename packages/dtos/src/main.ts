@@ -1,3 +1,4 @@
+import { z } from 'zod'
 type Name = {
   first: string
   last: string
@@ -17,10 +18,25 @@ export type SignUpRequest = {
   phone: Phone
 }
 
-export type SignInRequest = {
-  email: string
-  password: string
+export type ApiResponse<T> = {
+  statusCode: number
+  success: boolean
+  message: string
+  data?: T
 }
+
+export type SignInRequest = z.infer<typeof SignInRequestSchema>
+
+export const SignInRequestSchema = z.object({
+  email: z.string(),
+  password: z.string()
+})
+
+export type SignInResponse = z.infer<typeof SignInResponseSchema>
+export const SignInResponseSchema = z.object({
+  accessToken: z.string(),
+  type: z.string()
+})
 
 export type ConfirmUserRequest = {
   email: string
