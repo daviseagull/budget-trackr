@@ -1,22 +1,15 @@
-import { SignUpRequest } from '@budget-trackr/dtos'
+import { CreateUserRequest } from '@budget-trackr/dtos'
 import prisma from '../config/prisma'
 
 export const userRepository = {
-  create: async (signUpData: SignUpRequest) => {
+  create: async (userData: CreateUserRequest) => {
     return prisma.user.create({
       data: {
-        email: signUpData.email,
-        name: signUpData.name,
-        phone: signUpData.phone,
-        country: signUpData.country,
+        cognitoId: userData.cognitoId,
+        email: userData.email,
+        name: userData.name,
+        phone: userData.phone,
       },
-    })
-  },
-
-  setCognitoId: async (id: string, cognitoId: string) => {
-    await prisma.user.update({
-      where: { id: id },
-      data: { cognitoId: cognitoId },
     })
   },
 }

@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const axios = require('axios')
+
 module.exports.handler = async (event) => {
   if (!event.request.userAttributes) return
 
@@ -13,7 +16,14 @@ module.exports.handler = async (event) => {
     phone: userAttributes.phone_number,
   }
 
-  console.log(`user ${user}`)
+  await axios
+    .post(`${process.env.API_URL}/api/v1/users`, user)
+    .then(function (response) {
+      console.log(response)
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
 
   return event
 }
