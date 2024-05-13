@@ -18,6 +18,7 @@ const envSchema = z.object({
   APP_URL: z.string().url(),
   COGNITO_CLIENT_SECRET: z.string(),
   COGNITO_CLIENT_ID: z.string(),
+  COGNITO_USER_POOL_ID: z.string(),
 })
 
 export const env = envSchema.parse(process.env)
