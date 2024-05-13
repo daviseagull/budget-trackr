@@ -3,7 +3,7 @@ import prisma from '../config/prisma'
 
 export const userRepository = {
   create: async (userData: CreateUserRequest) => {
-    return prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         cognitoId: userData.cognitoId,
         email: userData.email,
@@ -11,5 +11,7 @@ export const userRepository = {
         phone: userData.phone,
       },
     })
+
+    return user
   },
 }
