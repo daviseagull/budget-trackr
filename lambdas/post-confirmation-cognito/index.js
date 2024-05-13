@@ -16,14 +16,7 @@ module.exports.handler = async (event) => {
     phone: userAttributes.phone_number,
   }
 
-  await axios
-    .post(`${process.env.API_URL}/api/v1/users`, user)
-    .then(function (response) {
-      console.log(response)
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
+  await axios.post(`${process.env.API_URL}/api/v1/users`, user)
 
   return event
 }
