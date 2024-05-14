@@ -1,0 +1,104 @@
+[
+    {
+        "description": "Salary",
+        "color": "",
+        "userId": "",
+        "type": "INCOME"
+    },
+    {
+        "description": "Gift",
+        "color": "",
+        "userId": "",
+        "type": "INCOME"
+    },
+    {
+        "description": "Others",
+        "color": "",
+        "userId": "",
+        "type": "INCOME"
+    },
+    {
+        "description": "Investment",
+        "color": "",
+        "userId": "",
+        "type": "INCOME"
+    },
+    {
+        "description": "Cashback",
+        "color": "",
+        "userId": "",
+        "type": "INCOME"
+    },
+    {
+        "description": "Education",
+        "color": "",
+        "userId": "",
+        "type": "EXPENSE"
+    },
+    {
+        "description": "Shopping",
+        "color": "",
+        "userId": "",
+        "type": "EXPENSE"
+    },
+    {
+        "description": "Health",
+        "color": "",
+        "userId": "",
+        "type": "EXPENSE"
+    },
+    {
+        "description": "Others",
+        "color": "",
+        "userId": "",
+        "type": "EXPENSE"
+    },
+    {
+        "description": "Home",
+        "color": "",
+        "userId": "",
+        "type": "EXPENSE"
+    },
+    {
+        "description": "Recreation",
+        "color": "",
+        "userId": "",
+        "type": "EXPENSE"
+    },
+    {
+        "description": "Restaurant",
+        "color": "",
+        "userId": "",
+        "type": "EXPENSE"
+    },
+    {
+        "description": "Delivery",
+        "color": "",
+        "userId": "",
+        "type": "EXPENSE"
+    },
+    {
+        "description": "Subscriptions",
+        "color": "",
+        "userId": "",
+        "type": "EXPENSE"
+    },
+    {
+        "description": "Grocery",
+        "color": "",
+        "userId": "",
+        "type": "EXPENSE"
+    },
+    {
+        "description": "Transport",
+        "color": "",
+        "userId": "",
+        "type": "EXPENSE"
+    },
+    {
+        "description": "Travel",
+        "color": "",
+        "userId": "",
+        "type": "EXPENSE"
+    }
+]
