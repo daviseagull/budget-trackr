@@ -10,13 +10,15 @@ const envSchema = z.object({
     'http',
     'verbose',
     'debug',
-    'silly'
+    'silly',
   ]),
   DATABASE_URL: z.string().url(),
-  COGNITO_CLIENT_ID: z.string(),
+  REGION: z.string(),
+  COGNITO_URL: z.string().url(),
+  APP_URL: z.string().url(),
   COGNITO_CLIENT_SECRET: z.string(),
+  COGNITO_CLIENT_ID: z.string(),
   COGNITO_USER_POOL_ID: z.string(),
-  REGION: z.string()
 })
 
 export const env = envSchema.parse(process.env)

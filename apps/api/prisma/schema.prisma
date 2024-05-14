@@ -1,5 +1,5 @@
 generator client {
-  binaryTargets = ["darwin-arm64", "rhel-openssl-3.0.x", "debian-openssl-3.0.x"]
+  binaryTargets = ["windows", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
   provider      = "prisma-client-js"
 }
 
@@ -9,43 +9,18 @@ datasource db {
 }
 
 model User {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  cognitoId   String      @unique
-  email       String      @unique
-  phone       Phone
-  name        Name
-  preferences Preferences
-  country     Country
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  cognitoId String?  @unique
+  email     String   @unique
+  phone     String
+  name      Name
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("users")
-}
-
-type Preferences {
-  currency Currency
-}
-
-type Phone {
-  country  String
-  areaCode Int
-  number   Int
 }
 
 type Name {
   first String
   last  String
-}
-
-enum Currency {
-  CAD
-  USD
-  BRL
-  YEN
-}
-
-enum Country {
-  USA
-  CAN
-  BRA
 }
