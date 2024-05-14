@@ -7,7 +7,7 @@ import axios from 'axios'
 import createHttpError from 'http-errors'
 import { env } from '../config/env'
 
-export const authUseCases = {
+export const authService = {
   signIn: async (code: string) => {
     const authorization = btoa(
       `${env.COGNITO_CLIENT_ID}:${env.COGNITO_CLIENT_SECRET}`
