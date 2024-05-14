@@ -1,0 +1,13 @@
+service: budget-trackr
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ca-central-1
+
+functions:
+  api:
+    handler: build/lambda.handler
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}

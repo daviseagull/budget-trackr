@@ -1,0 +1,11 @@
+service: post-confirmation-cognito
+frameworkVersion: '3'
+
+provider:
+  region: ca-central-1
+  name: aws
+  runtime: nodejs20.x
+
+functions:
+  function1:
+    handler: index.handler

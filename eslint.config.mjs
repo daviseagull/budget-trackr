@@ -1,4 +1,5 @@
 import pluginJs from '@eslint/js'
+import eslintConfigPrettier from 'eslint-config-prettier'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
@@ -10,9 +11,10 @@ export default [
       'public',
       'build',
       'pnpm-lock.yaml',
-      'pnpm-workspace.yaml'
-    ]
+      'pnpm-workspace.yaml',
+    ],
   },
   pluginJs.configs.recommended,
-  ...tseslint.configs.recommended
+  ...tseslint.configs.recommended,
+  eslintConfigPrettier,
 ]
