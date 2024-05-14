@@ -17,4 +17,12 @@ export const authController = {
       .status(200)
       .send(httpUtils.createResponse(true, 'User LoggedIn', 200, data))
   },
+
+  signOut: async (req: Request, res: Response) => {
+    await authUseCases.signOut(req.token!)
+
+    return res
+      .status(204)
+      .send(httpUtils.createResponse(true, 'Token revoked successfully', 204))
+  },
 }

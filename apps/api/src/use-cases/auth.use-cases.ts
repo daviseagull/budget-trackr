@@ -1,3 +1,8 @@
+import {
+  CognitoIdentityProviderClient,
+  GlobalSignOutCommand,
+  NotAuthorizedException,
+} from '@aws-sdk/client-cognito-identity-provider'
 import axios from 'axios'
 import createHttpError from 'http-errors'
 import { env } from '../config/env'
@@ -34,5 +39,24 @@ export const authUseCases = {
         )
       })
     return response
+  },
+
+  signOut: async (token: string) => {
+    try {
+      const client = new CognitoIdentityProviderClient({})
+
+      const input = {
+        AccessToken: token,
+      }
+      const command = new GlobalSignOutCommand(input)
+      await client.send(command)
+    } catch (err) {
+      if (err instanceof NotAuthorizedException)
+        throw new createHttpError.BadRequest(err.message)
+
+      throw new createHttpError.InternalServerError(
+        'Unknown error while revoking token.'
+      )
+    }
   },
 }

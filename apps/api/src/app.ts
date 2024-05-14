@@ -9,12 +9,13 @@ const app = express()
 
 app.use(cors())
 app.use(helmet())
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use(routes)
 
-app.all('/*', (req, res) => {
+app.all('/*', (_req, res) => {
   res.status(404).json({
     statusCode: 404,
     message: 'Cannot find specified route',
