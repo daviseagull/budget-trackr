@@ -20,7 +20,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: cd apps/api && yarn install && yarn build
+      - name: Run yarn install
+        run: yarn install
+      - name: Build packages/dtos
+        run: cd packages/dtos && yarn build
+      - name: Build apps/api
+        run: cd apps/api && yarn build
       - name: Serverless deploy
         uses: serverless/github-action@v3.2
         with:
