@@ -6,7 +6,7 @@ export const categoryRepository = {
     return await prisma.category.create({ data: category })
   },
 
-  createMany: async (categories: CategoryDto[]) => {
-    return await prisma.category.createMany({ data: categories })
+  createMany: async (categories: CategoryDto[]): Promise<void> => {
+    await prisma.category.createMany({ data: categories })
   },
 }

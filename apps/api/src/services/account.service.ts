@@ -1,4 +1,6 @@
 import {
+  AccountDto,
+  AccountDtoSchema,
   CreateAccountRequest,
   CreateAccountResponse,
 } from '@budget-trackr/dtos'
@@ -28,11 +30,15 @@ export const accountService = {
     return { id: account.id }
   },
 
-  getAll: async (userId: string) => {
+  getAll: async (userId: string): Promise<AccountDto[]> => {
     return await accountRepository.getAll(userId)
   },
 
-  getOne: async (userId: string, accountId: string) => {
-    return await accountRepository.getOneById(userId, accountId)
+  getOne: async (userId: string, accountId: string): Promise<AccountDto> => {
+    const account = await accountRepository.getOneById(userId, accountId)
+    if (!account) {
+      throw new createHttpError.BadRequest(`Account ${accountId} not found`)
+    }
+    return AccountDtoSchema.parse(account)
   },
 }

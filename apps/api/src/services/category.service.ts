@@ -3,7 +3,7 @@ import defaultCategories from '../../schemas/default-categories.json'
 import { categoryRepository } from '../repositories/category.repository'
 
 export const categoryService = {
-  createDefaultCategories: async (userId: string) => {
+  createDefaultCategories: async (userId: string): Promise<void> => {
     const categories: CategoryDto[] = defaultCategories.map(
       (defaultCategory) => {
         const category = CategoryDtoSchema.parse(defaultCategory)
