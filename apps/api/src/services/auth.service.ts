@@ -5,18 +5,18 @@ import {
   NotAuthorizedException,
   ResourceNotFoundException,
 } from '@aws-sdk/client-cognito-identity-provider'
+import { SignUpResponse } from '@budget-trackr/dtos'
 import axios from 'axios'
 import createHttpError from 'http-errors'
 import { env } from '../config/env'
 
 export const authService = {
-  signIn: async (code: string) => {
+  signIn: async (code: string): Promise<SignUpResponse> => {
     const authorization = btoa(
       `${env.COGNITO_CLIENT_ID}:${env.COGNITO_CLIENT_SECRET}`
     )
-
-    const response = axios
-      .post(
+    try {
+      const data = await axios.post(
         `${env.COGNITO_URL}/oauth2/token`,
         {
           grant_type: 'authorization_code',
@@ -32,18 +32,20 @@ export const authService = {
           },
         }
       )
-      .then((data) => {
-        return data.data
-      })
-      .catch(() => {
-        throw new createHttpError.InternalServerError(
-          'Unknown error while trying to log in'
-        )
-      })
-    return response
+
+      return {
+        token: data.data.id_token,
+        expiresIn: data.data.expires_in,
+        type: 'ID',
+      }
+    } catch (err) {
+      throw new createHttpError.InternalServerError(
+        'Unknown error while trying to log in'
+      )
+    }
   },
 
-  updateIdAttribute: async (sub: string, id: string) => {
+  updateIdAttribute: async (sub: string, id: string): Promise<void> => {
     try {
       const client = new CognitoIdentityProviderClient({})
 
@@ -71,7 +73,7 @@ export const authService = {
     }
   },
 
-  signOut: async (token: string) => {
+  signOut: async (token: string): Promise<void> => {
     try {
       const client = new CognitoIdentityProviderClient({})
 
