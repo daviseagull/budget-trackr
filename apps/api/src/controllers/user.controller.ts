@@ -12,4 +12,12 @@ export const userController = {
       .status(200)
       .send(httpUtils.createResponse(true, 'User created', 200, responseData))
   },
+
+  get: async (req: Request, res: Response) => {
+    const data = await userService.get(req.userId!)
+
+    return res
+      .status(200)
+      .send(httpUtils.createResponse(true, 'User retrivied', 200, data))
+  },
 }
