@@ -17,7 +17,8 @@ export async function authenticate(
   try {
     const payload = await cognitoUtils.getVerifier().verify(token)
 
-    req.user = payload.sub
+    req.cognitoId = payload.sub
+    req.userId = payload['custom:id'] as string
     req.token = token
   } catch {
     throw new createHttpError.Unauthorized('Invalid credentials')
