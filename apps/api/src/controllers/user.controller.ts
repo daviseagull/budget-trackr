@@ -50,7 +50,7 @@ export const userController = {
       )
     }
 
-    await userService.update(body, req.userId!)
+    await userService.update(body, req.userId!, req.cognitoId!)
 
     return res
       .status(204)

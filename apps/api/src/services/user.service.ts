@@ -34,13 +34,17 @@ export const userService = {
 
   update: async (
     userData: UpdateUserRequest,
-    userId: string
+    userId: string,
+    cognitoId: string
   ): Promise<void> => {
-    if (!userData.email && !userData.name && !userData.phone)
+    if (!userData.name && !userData.phone)
       throw new createHttpError.BadRequest(
         'Must pass at least one attribute to be updated.'
       )
 
-    await userRepository.update(userData, userId)
+    Promise.all([
+      userRepository.update(userData, userId),
+      authService.updateUser(userData, cognitoId),
+    ])
   },
 }
