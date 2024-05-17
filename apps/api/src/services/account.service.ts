@@ -5,7 +5,6 @@ import {
   CreateResourceResponse,
 } from '@budget-trackr/dtos'
 import createHttpError from 'http-errors'
-import logger from '../config/logger'
 import { accountRepository } from '../repositories/account.repository'
 
 export const accountService = {
@@ -18,7 +17,6 @@ export const accountService = {
       userId
     )
 
-    logger.info(JSON.stringify(isAlreadyCreated))
     if (isAlreadyCreated) {
       throw new createHttpError.BadRequest(
         `Account with the description ${data.description} already exists`
