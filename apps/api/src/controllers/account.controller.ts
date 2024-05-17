@@ -1,11 +1,25 @@
-import { CreateAccountRequestSchema } from '@budget-trackr/dtos'
+import {
+  CreateAccountRequest,
+  CreateAccountRequestSchema,
+} from '@budget-trackr/dtos'
 import { Request, Response } from 'express'
+import createHttpError from 'http-errors'
 import { accountService } from '../services/account.service'
 import { httpUtils } from '../utils/http.utils'
+import { validationUtils } from '../utils/validation.utils'
 
 export const accountController = {
   create: async (req: Request, res: Response) => {
-    const body = CreateAccountRequestSchema.parse(req.body)
+    const body = validationUtils.safeParse<CreateAccountRequest>(
+      req.body,
+      CreateAccountRequestSchema
+    )
+
+    if (!body) {
+      throw new createHttpError.BadRequest(
+        'Body must have description, balance and type.'
+      )
+    }
 
     const data = await accountService.create(body, req.userId!)
 

@@ -1,14 +1,44 @@
 import {
   AdminUpdateUserAttributesCommand,
+  AttributeType,
   CognitoIdentityProviderClient,
   GlobalSignOutCommand,
   NotAuthorizedException,
   ResourceNotFoundException,
 } from '@aws-sdk/client-cognito-identity-provider'
-import { SignUpResponse } from '@budget-trackr/dtos'
+import { SignUpResponse, UpdateUserRequest } from '@budget-trackr/dtos'
 import axios from 'axios'
 import createHttpError from 'http-errors'
 import { env } from '../config/env'
+import logger from '../config/logger'
+
+const updateUserInPool = async (
+  cognitoId: string,
+  userAttributes: AttributeType[]
+) => {
+  try {
+    const client = new CognitoIdentityProviderClient({})
+
+    const input = {
+      UserPoolId: env.COGNITO_USER_POOL_ID,
+      Username: cognitoId,
+      UserAttributes: userAttributes,
+    }
+
+    const command = new AdminUpdateUserAttributesCommand(input)
+
+    await client.send(command)
+  } catch (err) {
+    logger.info(JSON.stringify(err))
+
+    if (err instanceof ResourceNotFoundException) {
+      throw new createHttpError.BadRequest("User doesn't exist in cognito")
+    }
+    throw new createHttpError.InternalServerError(
+      'Unknown error while updating user in cognito.'
+    )
+  }
+}
 
 export const authService = {
   signIn: async (code: string): Promise<SignUpResponse> => {
@@ -45,32 +75,42 @@ export const authService = {
     }
   },
 
-  updateIdAttribute: async (sub: string, id: string): Promise<void> => {
-    try {
-      const client = new CognitoIdentityProviderClient({})
+  updateIdAttribute: async (cognitoId: string, id: string): Promise<void> => {
+    const userAttributes = [
+      {
+        Name: 'custom:id',
+        Value: id,
+      },
+    ]
+    await updateUserInPool(cognitoId, userAttributes)
+  },
 
-      const input = {
-        UserPoolId: env.COGNITO_USER_POOL_ID,
-        Username: sub,
-        UserAttributes: [
-          {
-            Name: 'custom:id',
-            Value: id,
-          },
-        ],
-      }
+  updateUser: async (
+    userData: UpdateUserRequest,
+    cognitoId: string
+  ): Promise<void> => {
+    const userAttributes: AttributeType[] = []
 
-      const command = new AdminUpdateUserAttributesCommand(input)
+    if (userData.name) {
+      userAttributes.push({
+        Name: 'given_name',
+        Value: userData.name.first,
+      })
 
-      await client.send(command)
-    } catch (err) {
-      if (err instanceof ResourceNotFoundException) {
-        throw new createHttpError.BadRequest("User doesn't exist in cognito")
-      }
-      throw new createHttpError.InternalServerError(
-        'Unknown error while updating user in cognito.'
-      )
+      userAttributes.push({
+        Name: 'family_name',
+        Value: userData.name.last,
+      })
     }
+
+    if (userData.phone) {
+      userAttributes.push({
+        Name: 'phone_number',
+        Value: userData.phone,
+      })
+    }
+
+    await updateUserInPool(cognitoId, userAttributes)
   },
 
   signOut: async (token: string): Promise<void> => {

@@ -1,6 +1,7 @@
 import {
+  CreateResourceResponse,
   CreateUserRequest,
-  CreateUserResponse,
+  UpdateUserRequest,
   UserDto,
   UserDtoSchema,
 } from '@budget-trackr/dtos'
@@ -10,7 +11,9 @@ import { authService } from './auth.service'
 import { categoryService } from './category.service'
 
 export const userService = {
-  create: async (userData: CreateUserRequest): Promise<CreateUserResponse> => {
+  create: async (
+    userData: CreateUserRequest
+  ): Promise<CreateResourceResponse> => {
     const user = await userRepository.create(userData)
 
     await categoryService.createDefaultCategories(user.id)
@@ -27,5 +30,21 @@ export const userService = {
     }
 
     return UserDtoSchema.parse(user)
+  },
+
+  update: async (
+    userData: UpdateUserRequest,
+    userId: string,
+    cognitoId: string
+  ): Promise<void> => {
+    if (!userData.name && !userData.phone)
+      throw new createHttpError.BadRequest(
+        'Must pass at least one attribute to be updated.'
+      )
+
+    Promise.all([
+      userRepository.update(userData, userId),
+      authService.updateUser(userData, cognitoId),
+    ])
   },
 }

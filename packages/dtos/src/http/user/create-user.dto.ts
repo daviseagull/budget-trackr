@@ -11,9 +11,3 @@ export const CreateUserRequestSchema = z.object({
     last: z.string(),
   }),
 })
-
-export type CreateUserResponse = z.infer<typeof CreateUserResponseSchema>
-
-export const CreateUserResponseSchema = z.object({
-  id: z.string(),
-})
