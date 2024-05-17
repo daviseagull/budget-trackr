@@ -1,4 +1,4 @@
-import { CreateUserRequest } from '@budget-trackr/dtos'
+import { CreateUserRequest, UpdateUserRequest } from '@budget-trackr/dtos'
 import { User } from '@prisma/client'
 import prisma from '../config/prisma'
 
@@ -18,5 +18,14 @@ export const userRepository = {
 
   get: async (userId: string): Promise<User | null> => {
     return await prisma.user.findUnique({ where: { id: userId } })
+  },
+
+  update: async (userData: UpdateUserRequest, userId: string) => {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: userData,
+    })
   },
 }

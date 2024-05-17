@@ -1,6 +1,7 @@
 import {
   CreateResourceResponse,
   CreateUserRequest,
+  UpdateUserRequest,
   UserDto,
   UserDtoSchema,
 } from '@budget-trackr/dtos'
@@ -29,5 +30,17 @@ export const userService = {
     }
 
     return UserDtoSchema.parse(user)
+  },
+
+  update: async (
+    userData: UpdateUserRequest,
+    userId: string
+  ): Promise<void> => {
+    if (!userData.email && !userData.name && !userData.phone)
+      throw new createHttpError.BadRequest(
+        'Must pass at least one attribute to be updated.'
+      )
+
+    await userRepository.update(userData, userId)
   },
 }
