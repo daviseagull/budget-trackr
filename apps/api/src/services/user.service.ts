@@ -1,6 +1,6 @@
 import {
+  CreateResourceResponse,
   CreateUserRequest,
-  CreateUserResponse,
   UserDto,
   UserDtoSchema,
 } from '@budget-trackr/dtos'
@@ -10,7 +10,9 @@ import { authService } from './auth.service'
 import { categoryService } from './category.service'
 
 export const userService = {
-  create: async (userData: CreateUserRequest): Promise<CreateUserResponse> => {
+  create: async (
+    userData: CreateUserRequest
+  ): Promise<CreateResourceResponse> => {
     const user = await userRepository.create(userData)
 
     await categoryService.createDefaultCategories(user.id)

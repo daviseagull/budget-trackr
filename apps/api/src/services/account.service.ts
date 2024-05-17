@@ -2,7 +2,7 @@ import {
   AccountDto,
   AccountDtoSchema,
   CreateAccountRequest,
-  CreateAccountResponse,
+  CreateResourceResponse,
 } from '@budget-trackr/dtos'
 import createHttpError from 'http-errors'
 import logger from '../config/logger'
@@ -12,7 +12,7 @@ export const accountService = {
   create: async (
     data: CreateAccountRequest,
     userId: string
-  ): Promise<CreateAccountResponse> => {
+  ): Promise<CreateResourceResponse> => {
     const isAlreadyCreated = await accountRepository.getOneByDescription(
       data.description,
       userId
