@@ -15,13 +15,14 @@ export const accountController = {
       req.body,
       CreateAccountRequestSchema
     )
-    logger.info(`Creating account ${body?.description} for user ${req.userId} `)
 
     if (!body) {
       throw new createHttpError.BadRequest(
         'Body must have description, balance and type.'
       )
     }
+
+    logger.info(`Creating account ${body.description} for user ${req.userId} `)
 
     const data = await accountService.create(body, req.userId!)
 
