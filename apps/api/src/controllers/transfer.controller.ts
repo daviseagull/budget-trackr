@@ -40,4 +40,36 @@ export const transferController = {
         httpUtils.createResponse(true, 'Transfer made successfully', 200, data)
       )
   },
+
+  getByFilters: async (req: Request, res: Response) => {
+    const origin = req.query['origin'] as string
+    const target = req.query['target'] as string
+    const fromDate = req.query['from-date'] as string
+    const toDate = req.query['to-date'] as string
+
+    logger.info(
+      `Getting transfers with filters: origin (${origin}) target (${target}) fromDate (${fromDate}) toDate (${toDate}))`
+    )
+
+    const data = await transferService.getByFilters(
+      req.userId!,
+      origin,
+      target,
+      fromDate,
+      toDate
+    )
+
+    logger.info(`Retrivied transfers successfully.`)
+
+    return res
+      .status(200)
+      .send(
+        httpUtils.createResponse(
+          true,
+          'Retrivied transfers successfully',
+          200,
+          data
+        )
+      )
+  },
 }
