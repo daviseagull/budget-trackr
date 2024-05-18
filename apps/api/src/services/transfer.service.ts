@@ -1,6 +1,7 @@
 import {
   CreateResourceResponse,
   CreateTransferRequest,
+  TransferDtoSchema,
 } from '@budget-trackr/dtos'
 import createHttpError from 'http-errors'
 import { transferRepository } from '../repositories/transfer.repository'
@@ -63,5 +64,23 @@ export const transferService = {
     }
 
     return { id: transfer.id }
+  },
+
+  getByFilters: async (
+    userId: string,
+    originId?: string,
+    targetId?: string,
+    fromDate?: string,
+    toDate?: string
+  ) => {
+    const transfers = await transferRepository.getByFilters(
+      userId,
+      originId,
+      targetId,
+      fromDate,
+      toDate
+    )
+
+    return transfers.map((transfer) => TransferDtoSchema.parse(transfer))
   },
 }

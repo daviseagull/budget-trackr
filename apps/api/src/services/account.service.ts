@@ -30,7 +30,9 @@ export const accountService = {
   },
 
   getAll: async (userId: string): Promise<AccountDto[]> => {
-    return await accountRepository.getAll(userId)
+    const accounts = await accountRepository.getAll(userId)
+
+    return accounts.map((account) => AccountDtoSchema.parse(account))
   },
 
   getOne: async (userId: string, accountId: string): Promise<AccountDto> => {

@@ -29,7 +29,9 @@ export const cardService = {
   },
 
   getAll: async (userId: string): Promise<CardDto[]> => {
-    return await cardRepository.getAll(userId)
+    const cards = await cardRepository.getAll(userId)
+
+    return cards.map((card) => CardDtoSchema.parse(card))
   },
 
   getOne: async (userId: string, CardId: string): Promise<CardDto> => {
