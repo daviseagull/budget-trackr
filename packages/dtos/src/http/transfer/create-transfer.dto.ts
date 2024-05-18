@@ -7,5 +7,5 @@ export const CreateTransferRequestSchema = z.object({
   targetId: z.string(),
   value: z.number().min(0),
   date: z.coerce.date().max(new Date()),
-  description: z.string().nullish(),
+  description: z.string().max(64).nullish(),
 })
