@@ -22,6 +22,10 @@ export const transferController = {
       )
     }
 
+    if (body.originId === body.targetId) {
+      throw new createHttpError.BadRequest('Must be different accounts.')
+    }
+
     logger.info(
       `Transfering ${body.value} from ${body.originId} to ${body.targetId}`
     )
