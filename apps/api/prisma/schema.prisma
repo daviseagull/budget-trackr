@@ -102,7 +102,7 @@ model Transfer {
   originId    String   @db.ObjectId
   target      Account  @relation(name: "target", fields: [targetId], references: [id])
   targetId    String   @db.ObjectId
-  description String
+  description String?
   date        DateTime
   value       Float
 
