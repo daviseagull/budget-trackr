@@ -37,22 +37,29 @@ export const accountRepository = {
     })
   },
 
-  updateBalance: async (
-    accountId: string,
+  transfer: async (
+    originId: string,
+    targetId: string,
     userId: string,
-    isAddition: boolean,
     value: number
-  ): Promise<void> => {
-    const account = await prisma.account.findUnique({
-      where: { id: accountId, userId: userId },
-    })
-    const newBalance = isAddition
-      ? account!.balance + value
-      : account!.balance - value
-
-    await prisma.account.update({
-      where: { userId, id: accountId },
-      data: { balance: newBalance },
-    })
+  ) => {
+    await prisma.$transaction([
+      prisma.account.update({
+        where: { id: originId, userId: userId },
+        data: {
+          balance: {
+            decrement: value,
+          },
+        },
+      }),
+      prisma.account.update({
+        where: { id: targetId, userId: userId },
+        data: {
+          balance: {
+            increment: value,
+          },
+        },
+      }),
+    ])
   },
 }

@@ -43,12 +43,12 @@ export const accountService = {
     return AccountDtoSchema.parse(account)
   },
 
-  updateBalance: async (
-    accountId: string,
+  transfer: async (
+    originId: string,
+    targetId: string,
     userId: string,
-    isAddition: boolean,
     value: number
   ): Promise<void> => {
-    await accountRepository.updateBalance(accountId, userId, isAddition, value)
+    await accountRepository.transfer(originId, targetId, userId, value)
   },
 }

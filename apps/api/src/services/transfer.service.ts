@@ -43,17 +43,10 @@ export const transferService = {
     )
 
     try {
-      await accountService.updateBalance(
+      await accountService.transfer(
         data.originId,
-        userId,
-        false,
-        data.value
-      )
-
-      await accountService.updateBalance(
         data.targetId,
         userId,
-        true,
         data.value
       )
     } catch (err) {
