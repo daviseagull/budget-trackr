@@ -19,6 +19,7 @@ model User {
   categories Category[]
   accounts   Account[]
   cards      Card[]
+  Transfer   Transfer[]
 
   @@map("users")
 }
@@ -50,14 +51,16 @@ enum CategoryType {
 }
 
 model Account {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  user        User        @relation(fields: [userId], references: [id])
-  userId      String      @db.ObjectId
-  description String
-  balance     Float
-  type        AccountType
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  user            User        @relation(fields: [userId], references: [id])
+  userId          String      @db.ObjectId
+  description     String
+  balance         Float
+  type            AccountType
+  originTransfer  Transfer[]  @relation("origin")
+  targetTransfers Transfer[]  @relation("target")
 
   @@map("accounts")
 }
@@ -87,4 +90,21 @@ enum Brand {
   MASTERCARD
   VISA
   AMEX
+}
+
+model Transfer {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @db.ObjectId
+  origin      Account  @relation(name: "origin", fields: [originId], references: [id])
+  originId    String   @db.ObjectId
+  target      Account  @relation(name: "target", fields: [targetId], references: [id])
+  targetId    String   @db.ObjectId
+  description String
+  date        DateTime
+  value       Float
+
+  @@map("transfers")
 }

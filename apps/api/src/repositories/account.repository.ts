@@ -36,4 +36,23 @@ export const accountRepository = {
       where: { description, userId },
     })
   },
+
+  updateBalance: async (
+    accountId: string,
+    userId: string,
+    isAddition: boolean,
+    value: number
+  ): Promise<void> => {
+    const account = await prisma.account.findUnique({
+      where: { id: accountId, userId: userId },
+    })
+    const newBalance = isAddition
+      ? account!.balance + value
+      : account!.balance - value
+
+    await prisma.account.update({
+      where: { userId, id: accountId },
+      data: { balance: newBalance },
+    })
+  },
 }

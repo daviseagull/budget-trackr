@@ -6,18 +6,19 @@ import {
 } from '@budget-trackr/dtos'
 import createHttpError from 'http-errors'
 import { accountRepository } from '../repositories/account.repository'
+import { accountUtils } from '../utils/account.utils'
 
 export const accountService = {
   create: async (
     data: CreateAccountRequest,
     userId: string
   ): Promise<CreateResourceResponse> => {
-    const isAlreadyCreated = await accountRepository.getOneByDescription(
+    const exists = await accountUtils.verifyIfExistsByDescription(
       data.description,
       userId
     )
 
-    if (isAlreadyCreated) {
+    if (exists) {
       throw new createHttpError.BadRequest(
         `Account with the description ${data.description} already exists`
       )
@@ -38,5 +39,14 @@ export const accountService = {
       throw new createHttpError.BadRequest(`Account ${accountId} not found`)
     }
     return AccountDtoSchema.parse(account)
+  },
+
+  updateBalance: async (
+    accountId: string,
+    userId: string,
+    isAddition: boolean,
+    value: number
+  ): Promise<void> => {
+    await accountRepository.updateBalance(accountId, userId, isAddition, value)
   },
 }
