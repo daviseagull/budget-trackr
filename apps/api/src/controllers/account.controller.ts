@@ -26,9 +26,7 @@ export const accountController = {
 
     const data = await accountService.create(body, req.userId!)
 
-    logger.info(
-      `Account created successfully. accountId: ${data.id} user: ${req.userId}`
-    )
+    logger.info('Account created successfully.')
     return res
       .status(200)
       .send(httpUtils.createResponse(true, 'Account created', 200, data))
@@ -39,7 +37,7 @@ export const accountController = {
 
     const data = await accountService.getAll(req.userId!)
 
-    logger.info(`Accounts retrieved successfully. user ${req.userId} `)
+    logger.info('Accounts retrieved successfully')
     return res
       .status(200)
       .send(
@@ -53,9 +51,7 @@ export const accountController = {
 
     const data = await accountService.getOne(req.userId!, accountId)
 
-    logger.info(
-      `Account retrieved successfully. accountId: ${accountId} user ${req.userId} `
-    )
+    logger.info(`Account retrieved successfully.`)
     return res
       .status(200)
       .send(
