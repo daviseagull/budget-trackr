@@ -51,4 +51,13 @@ export const accountService = {
   ): Promise<void> => {
     await accountRepository.transfer(originId, targetId, userId, value)
   },
+
+  addTransaction: async (
+    accountId: string,
+    userId: string,
+    type: string,
+    value: number
+  ) => {
+    await accountRepository.addTransaction(accountId, userId, type, value)
+  },
 }

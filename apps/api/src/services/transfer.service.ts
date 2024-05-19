@@ -30,7 +30,7 @@ const verifyIfTransferAccountsExists = async (
 }
 
 export const transferService = {
-  transfer: async (
+  create: async (
     userId: string,
     data: CreateTransferRequest
   ): Promise<CreateResourceResponse> => {

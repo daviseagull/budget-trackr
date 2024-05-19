@@ -30,7 +30,7 @@ export const transferController = {
       `Transfering ${body.value} from ${body.originId} to ${body.targetId}`
     )
 
-    const data = await transferService.transfer(req.userId!, body)
+    const data = await transferService.create(req.userId!, body)
 
     logger.info(`Transfer made successfully.`)
 

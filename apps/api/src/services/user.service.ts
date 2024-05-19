@@ -24,11 +24,6 @@ export const userService = {
 
   get: async (userId: string): Promise<UserDto> => {
     const user = await userRepository.get(userId)
-
-    if (!user) {
-      throw new createHttpError.BadRequest('User not found')
-    }
-
     return UserDtoSchema.parse(user)
   },
 

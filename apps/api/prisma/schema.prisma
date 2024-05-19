@@ -9,17 +9,19 @@ datasource db {
 }
 
 model User {
-  id         String     @id @default(auto()) @map("_id") @db.ObjectId
-  cognitoId  String?    @unique
-  email      String     @unique
-  phone      String
-  name       Name
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  categories Category[]
-  accounts   Account[]
-  cards      Card[]
-  Transfer   Transfer[]
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  cognitoId String?  @unique
+  email     String   @unique
+  phone     String
+  name      Name
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categories          Category[]
+  accounts            Account[]
+  cards               Card[]
+  transfers           Transfer[]
+  accountTransactions AccountTransaction[]
 
   @@map("users")
 }
@@ -33,14 +35,16 @@ model Category {
   id          String       @id @default(auto()) @map("_id") @db.ObjectId
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  user        User         @relation(fields: [userId], references: [id])
   userId      String       @db.ObjectId
   description String
   color       String
   type        CategoryType
   parentId    String?      @db.ObjectId
-  parent      Category?    @relation("parent", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  childs      Category[]   @relation("parent")
+
+  user                User                 @relation(fields: [userId], references: [id])
+  parent              Category?            @relation("parent", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childs              Category[]           @relation("parent")
+  accountTransactions AccountTransaction[]
 
   @@map("categories")
 }
@@ -51,16 +55,18 @@ enum CategoryType {
 }
 
 model Account {
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-  user            User        @relation(fields: [userId], references: [id])
-  userId          String      @db.ObjectId
-  description     String
-  balance         Float
-  type            AccountType
-  originTransfer  Transfer[]  @relation("origin")
-  targetTransfers Transfer[]  @relation("target")
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  userId      String      @db.ObjectId
+  description String
+  balance     Float
+  type        AccountType
+
+  user            User                 @relation(fields: [userId], references: [id])
+  originTransfer  Transfer[]           @relation("origin")
+  targetTransfers Transfer[]           @relation("target")
+  transactions    AccountTransaction[] @relation("transactions")
 
   @@map("accounts")
 }
@@ -76,12 +82,13 @@ model Card {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
   userId    String   @db.ObjectId
   name      String
   brand     Brand
   dueDate   Int
   limit     Int
+
+  user User @relation(fields: [userId], references: [id])
 
   @@map("cards")
 }
@@ -96,15 +103,41 @@ model Transfer {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id])
   userId      String   @db.ObjectId
-  origin      Account  @relation(name: "origin", fields: [originId], references: [id])
   originId    String   @db.ObjectId
-  target      Account  @relation(name: "target", fields: [targetId], references: [id])
   targetId    String   @db.ObjectId
   description String?
   date        DateTime
   value       Float
 
+  user   User    @relation(fields: [userId], references: [id])
+  origin Account @relation(name: "origin", fields: [originId], references: [id])
+  target Account @relation(name: "target", fields: [targetId], references: [id])
+
   @@map("transfers")
+}
+
+model AccountTransaction {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  userId      String          @db.ObjectId
+  accountId   String          @db.ObjectId
+  categoryId  String          @db.ObjectId
+  name        String
+  description String?
+  value       Float
+  date        DateTime
+  type        TransactionType
+
+  account  Account  @relation(name: "transactions", fields: [accountId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@map("accountTransactions")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
 }

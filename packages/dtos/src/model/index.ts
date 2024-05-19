@@ -1,3 +1,4 @@
+export * from './account-transactions.dto'
 export * from './account.dto'
 export * from './card.dto'
 export * from './category.dto'
