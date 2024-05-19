@@ -1,5 +1,6 @@
 import { CreateAccountRequest } from '@budget-trackr/dtos'
-import { Account } from '@prisma/client'
+import { Account, TransactionType } from '@prisma/client'
+import logger from '../config/logger'
 import prisma from '../config/prisma'
 
 export const accountRepository = {
@@ -35,6 +36,41 @@ export const accountRepository = {
     return await prisma.account.findFirst({
       where: { description, userId },
     })
+  },
+
+  addTransaction: async (
+    accountId: string,
+    userId: string,
+    type: string,
+    value: number
+  ) => {
+    logger.info(
+      `accountID: ${accountId}, userId: ${userId}, type: ${type},  value: ${value}`
+    )
+    if (type === TransactionType.EXPENSE) {
+      logger.info('entrei')
+      prisma.account.update({
+        where: { id: accountId, userId },
+        data: {
+          balance: {
+            decrement: value,
+          },
+        },
+      })
+    }
+
+    if (type === TransactionType.INCOME) {
+      logger.info('aqui')
+
+      await prisma.account.update({
+        where: { id: accountId, userId },
+        data: {
+          balance: {
+            increment: value,
+          },
+        },
+      })
+    }
   },
 
   transfer: async (
