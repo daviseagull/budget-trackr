@@ -48,7 +48,6 @@ export const accountRepository = {
       `accountID: ${accountId}, userId: ${userId}, type: ${type},  value: ${value}`
     )
     if (type === TransactionType.EXPENSE) {
-      logger.info('entrei')
       prisma.account.update({
         where: { id: accountId, userId },
         data: {
@@ -60,8 +59,6 @@ export const accountRepository = {
     }
 
     if (type === TransactionType.INCOME) {
-      logger.info('aqui')
-
       await prisma.account.update({
         where: { id: accountId, userId },
         data: {
