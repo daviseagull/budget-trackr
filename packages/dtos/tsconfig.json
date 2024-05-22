@@ -1,15 +1,20 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 22",
+  "_version": "22.0.0",
+
   "compilerOptions": {
-  
-    "target": "esnext",
-    "module": "CommonJS",
-    "skipLibCheck": true,
-  
-    "declaration": true,
-    "declarationMap": true,
-    "outDir": "./dist/",
-    "removeComments": true,
+    "lib": ["es2023"],
+    "module": "node16",
+    "target": "es2022",
+
+    "resolveJsonModule": true,
+    "rootDir": "./src",
+    "outDir": "./build",
+
     "strict": true,
-    "noImplicitAny": false
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node16"
   }
 }
