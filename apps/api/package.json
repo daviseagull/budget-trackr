@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node build/server.js NODE_ENV=production",
-    "start:dev": "tsx watch --env-file .env src/server.ts",
+    "start:dev": "tsx watch --env-file .env src/server.ts"
   },
   "workspaces": {
     "nohoist": [
