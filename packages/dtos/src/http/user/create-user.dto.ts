@@ -4,16 +4,18 @@ export type CreateUserRequest = z.infer<typeof CreateUserRequestSchema>
 
 export const CreateUserRequestSchema = z.object({
   cognitoId: z.string(),
-  email: z.string().email(),
+  email: z.string().email().toLowerCase(),
   phone: z.string(),
   name: z.object({
-    first: z.string(),
-    last: z.string(),
+    first: z
+      .string()
+      .transform(
+        (data) => data.charAt(0).toUpperCase() + data.substring(1).toLowerCase()
+      ),
+    last: z
+      .string()
+      .transform(
+        (data) => data.charAt(0).toUpperCase() + data.substring(1).toLowerCase()
+      ),
   }),
-})
-
-export type CreateUserResponse = z.infer<typeof CreateUserResponseSchema>
-
-export const CreateUserResponseSchema = z.object({
-  id: z.string(),
 })

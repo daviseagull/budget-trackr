@@ -1,10 +1,13 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 22",
+  "_version": "22.0.0",
+
   "compilerOptions": {
-  
     "target": "esnext",
     "module": "CommonJS",
     "skipLibCheck": true,
-  
+
     "declaration": true,
     "declarationMap": true,
     "outDir": "./dist/",

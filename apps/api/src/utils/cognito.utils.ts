@@ -6,7 +6,7 @@ export const cognitoUtils = {
   getVerifier: () => {
     return CognitoJwtVerifier.create({
       userPoolId: env.COGNITO_USER_POOL_ID,
-      tokenUse: 'access',
+      tokenUse: 'id',
       clientId: env.COGNITO_CLIENT_ID,
     })
   },

@@ -17,10 +17,127 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  categories          Category[]
+  accounts            Account[]
+  cards               Card[]
+  transfers           Transfer[]
+  accountTransactions AccountTransaction[]
+
   @@map("users")
 }
 
 type Name {
   first String
   last  String
+}
+
+model Category {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  userId      String       @db.ObjectId
+  description String
+  color       String
+  type        CategoryType
+  parentId    String?      @db.ObjectId
+
+  user                User                 @relation(fields: [userId], references: [id])
+  parent              Category?            @relation("parent", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childs              Category[]           @relation("parent")
+  accountTransactions AccountTransaction[]
+
+  @@map("categories")
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+}
+
+model Account {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  userId      String      @db.ObjectId
+  description String
+  balance     Float
+  type        AccountType
+
+  user            User                 @relation(fields: [userId], references: [id])
+  originTransfer  Transfer[]           @relation("origin")
+  targetTransfers Transfer[]           @relation("target")
+  transactions    AccountTransaction[] @relation("transactions")
+
+  @@map("accounts")
+}
+
+enum AccountType {
+  WALLET
+  SAVINGS
+  INVESTMENTS
+  CHEQUING
+}
+
+model Card {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String   @db.ObjectId
+  name      String
+  brand     Brand
+  dueDate   Int
+  limit     Int
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("cards")
+}
+
+enum Brand {
+  MASTERCARD
+  VISA
+  AMEX
+}
+
+model Transfer {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String   @db.ObjectId
+  originId    String   @db.ObjectId
+  targetId    String   @db.ObjectId
+  description String?
+  date        DateTime
+  value       Float
+
+  user   User    @relation(fields: [userId], references: [id])
+  origin Account @relation(name: "origin", fields: [originId], references: [id])
+  target Account @relation(name: "target", fields: [targetId], references: [id])
+
+  @@map("transfers")
+}
+
+model AccountTransaction {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  userId      String          @db.ObjectId
+  accountId   String          @db.ObjectId
+  categoryId  String          @db.ObjectId
+  name        String
+  description String?
+  value       Float
+  date        DateTime
+  type        TransactionType
+
+  account  Account  @relation(name: "transactions", fields: [accountId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@map("accountTransactions")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
 }
